@@ -36,16 +36,12 @@ public class Analisador {
             r = new PushbackReader(new BufferedReader(new InputStreamReader(
                     new FileInputStream(path), "US-ASCII")));
 
-            int intData;
-            while ((intData = r.read()) != -1) {
-                Character data = (char) intData;
-
+            Character data;
+            while ((data = Ler()) != -1) {
 
                 if (Character.isWhitespace((data))) {
-                    proximaColuna(data);
+                    proximaLinha(data);
                     continue;
-                } else {
-                    coluna++;
                 }
 
                 Token token = pegarToken(data);
@@ -57,6 +53,7 @@ public class Analisador {
                     tokens.add(token);
                 }
             }
+            System.out.printf("{}  ",linha, coluna);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -68,11 +65,16 @@ public class Analisador {
     private Token pegarToken(Character c) {
         Token tk = new Token();
         String lexema = "";
-        desler(c); // GAMBIS :9
+        //desler(c); // GAMBIS :9
+        int colunaAtual = 0;
+        int linhaAtual = 0;
+
         while (true) {
-            c = Ler();
+            //c = Ler();
             switch (estado) {
                 case 0:
+                    colunaAtual = coluna;
+                    linhaAtual = linha;
                     if (Character.isDigit(c)) {
                         lexema += c;
                         estado = 12;
@@ -82,12 +84,11 @@ public class Analisador {
                     } else if ( c.equals(':')) {
                         lexema += c;
                         estado = 1;
-                    } else if (OperadorRelacional.charToSimbol(c) || OperadorAritmetico.charToSimbol(c) || SimboloPontuacao.charToSimbol(c)) {
+                    } else if (OperadorRelacional.charToSimbol(c) || OperadorAritmetico.charToSimbol(c) || SimboloPontuacao.charToSimbol(c) && !c.equals('=')) {
                         variosIfsSemFim(c);
                         lexema += c;
                     } else {
-                        tk.setTipo(Tipo.SERRO);
-                        return tk;
+                        return tk = null;
                     }
                     break;
                 case 1:
@@ -95,112 +96,125 @@ public class Analisador {
                         lexema += c;
                         estado = 2;
                     } else {
-                        desler(c);
                         estado = 3;
                     }
                     break;
                 case 2:
-                    desler(c);
                     tk.setTipo(Tipo.SATRIBUICAO);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 3:
-                    desler(c);
                     tk.setTipo(Tipo.STIPO);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 4:
-                    desler(c);
                     tk.setTipo(Tipo.SMAIS);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 5:
-                    desler(c);
                     tk.setTipo(Tipo.SMENOS);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 6:
-                    desler(c);
                     tk.setTipo(Tipo.SMULTIPLICACAO);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 7:
-                    desler(c);
                     tk.setTipo(Tipo.SDIVIDIR);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 8:
-                    desler(c);
                     tk.setTipo(Tipo.SPONTO_E_VIRGULA);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 9:
-                    desler(c);
                     tk.setTipo(Tipo.SPONTO);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 10:
-                    desler(c);
                     tk.setTipo(Tipo.SABRE_PARENTESIS);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 11:
-                    desler(c);
                     tk.setTipo(Tipo.SFECHA_PARENTESIS);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 12:
                     if (Character.isDigit(c)) {
                         lexema += c;
-                        estado = 12;
+                        c = Ler();
                     } else if (!Character.isDigit(c)) {
                         desler(c);
                         estado = 13;
                     }
                     break;
                 case 13:
-                    desler(c);
                     tk.setTipo(Tipo.SNUMERO);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 case 14:
                     if (Character.isDigit(c) || Character.isAlphabetic(c) || c.equals('_')) {
                         lexema += c;
-                        estado = 14;
+                        c = Ler();
                     } else if (!Character.isDigit(c) || !Character.isAlphabetic(c) || !c.equals(')')) {
-                        desler(c);
                         estado = 15;
                     }
                     break;
                 case 15:
-                    desler(c);
                     tk.setTipo(Tipo.SIDENTIFICADOR);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
                     return tk;
                 default:
-                    desler(c);
                     tk.setTipo(Tipo.SERRO);
                     tk.setLexema(lexema);
+                    tk.setColuna(colunaAtual);
+                    tk.setLinha(linhaAtual);
                     estado = 0;
+                    return tk;
             }
+            //c = Ler();
         }
-
     }
 
     private Character Ler() {
         try {
+            coluna++;
             int c = r.read();
             return c != -1 ? (char) c : (char) -1; // TODO: RETIRAR
         } catch (Exception e) {
@@ -216,14 +230,10 @@ public class Analisador {
         }
     }
 
-    private void proximaColuna(Character c) {
-        coluna++;
-        proximaLinha(c);
-    }
-
     // gostei do nome, mt criativo
     private void desler(Character ch) {
         try {
+            coluna--;
             r.unread((int) ch);
         } catch (Exception e) {
             System.out.println(e);

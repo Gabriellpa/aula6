@@ -3,7 +3,7 @@ package dores.enums;
 import java.util.Arrays;
 
 public enum OperadorRelacional {
-    MAIOR('>'),MENOR('<'),IGUAL('=');
+    MAIOR('>'),MENOR('<');
 
     private Character simbolo;
 
