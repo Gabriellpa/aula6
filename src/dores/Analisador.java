@@ -45,15 +45,11 @@ public class Analisador {
                 }
 
                 Token token = pegarToken(data);
-
-                if (Tipo.SERRO.equals(token.getTipo())) {
-                    tokens.add(token);
+                if(fimAnalisar(token)){
                     return tokens;
-                } else {
-                    tokens.add(token);
                 }
             }
-            System.out.printf("{}  ",linha, coluna);
+            //System.out.printf("{}  ",linha, coluna);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -77,12 +73,15 @@ public class Analisador {
                     linhaAtual = linha;
                     if (Character.isDigit(c)) {
                         lexema += c;
+                        c = Ler();
                         estado = 12;
                     } else if (Character.isAlphabetic(c)) {
                         lexema += c;
+                        c = Ler();
                         estado = 14;
                     } else if ( c.equals(':')) {
                         lexema += c;
+                        c = Ler();
                         estado = 1;
                     } else if (OperadorRelacional.charToSimbol(c) || OperadorAritmetico.charToSimbol(c) || SimboloPontuacao.charToSimbol(c) && !c.equals('=')) {
                         variosIfsSemFim(c);
@@ -96,6 +95,7 @@ public class Analisador {
                         lexema += c;
                         estado = 2;
                     } else {
+                        desler(c);
                         estado = 3;
                     }
                     break;
@@ -190,6 +190,7 @@ public class Analisador {
                         lexema += c;
                         c = Ler();
                     } else if (!Character.isDigit(c) || !Character.isAlphabetic(c) || !c.equals(')')) {
+                        desler(c);
                         estado = 15;
                     }
                     break;
@@ -221,7 +222,7 @@ public class Analisador {
             System.out.println(e);
         }
         return (char) -1; // TODO: RETIRAR
-    }
+}
 
     private void proximaLinha(Character c) {
         if (c.equals('\n')) {
@@ -257,6 +258,19 @@ public class Analisador {
             estado = 10;
         } else if (c.equals(')')) {
             estado = 11;
+        }
+    }
+
+    private boolean fimAnalisar(Token token){
+        if (token == null) {
+            return true;
+        } else if(Tipo.SERRO.equals(token.getTipo())){
+            tokens.add(token);
+            return true;
+        } else
+        {
+            tokens.add(token);
+            return false;
         }
     }
 }
