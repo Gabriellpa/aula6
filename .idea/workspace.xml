@@ -6,7 +6,6 @@
       <change beforePath="$PROJECT_DIR$/src/dores/Analisador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dores/Analisador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dores/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dores/Main.java" afterDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,6 +126,8 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectId" id="1RCH5DsZfnC0WqKOhuz81JhR655" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
