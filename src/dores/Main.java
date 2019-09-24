@@ -2,6 +2,7 @@ package dores;
 
 import dores.estruturas.Token;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class Main {
@@ -14,7 +15,8 @@ public class Main {
         //final String path = "C:\\Users\\alu201518294\\Documents\\trabalhos\\estados-compilador\\src\\resources\\program-teste";
         Analisador analisador = new Analisador(path);
         List<Token> tokens = analisador.Analisar();
+
+        System.out.printf(MessageFormat.format("Quantidade de Tokens: '{'{0}'} \n", tokens.size()));
         tokens.forEach(System.out::println);
-        //   tokens.forEach(c -> System.out.println(c.getLexema()));
     }
 }
