@@ -38,18 +38,15 @@ public class Analisador {
 
             Character data;
             while ((data = Ler()) != -1) {
-
                 if (Character.isWhitespace((data))) {
                     proximaLinha(data);
                     continue;
                 }
-
                 Token token = pegarToken(data);
                 if(fimAnalisar(token)){
                     return tokens;
                 }
             }
-            //System.out.printf("{}  ",linha, coluna);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -59,14 +56,11 @@ public class Analisador {
 
     // TODO: LINHA E COLUNA
     private Token pegarToken(Character c) {
-        Token tk = new Token();
         String lexema = "";
-        //desler(c); // GAMBIS :9
         int colunaAtual = 0;
         int linhaAtual = 0;
 
         while (true) {
-            //c = Ler();
             switch (estado) {
                 case 0:
                     colunaAtual = coluna;
@@ -83,11 +77,12 @@ public class Analisador {
                         lexema += c;
                         c = Ler();
                         estado = 1;
-                    } else if (OperadorRelacional.charToSimbol(c) || OperadorAritmetico.charToSimbol(c) || SimboloPontuacao.charToSimbol(c) && !c.equals('=')) {
+                    } else if (OperadorRelacional.charToSimbol(c) || OperadorAritmetico.charToSimbol(c) ||
+                                SimboloPontuacao.charToSimbol(c) && !c.equals('=')) {
                         variosIfsSemFim(c);
                         lexema += c;
                     } else {
-                        return tk = null;
+                        return null;
                     }
                     break;
                 case 1:
@@ -100,75 +95,25 @@ public class Analisador {
                     }
                     break;
                 case 2:
-                    tk.setTipo(Tipo.SATRIBUICAO);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SATRIBUICAO,lexema,linhaAtual,colunaAtual);
                 case 3:
-                    tk.setTipo(Tipo.STIPO);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.STIPO,lexema,linhaAtual,colunaAtual);
                 case 4:
-                    tk.setTipo(Tipo.SMAIS);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SMAIS,lexema,linhaAtual,colunaAtual);
                 case 5:
-                    tk.setTipo(Tipo.SMENOS);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SMENOS,lexema,linhaAtual,colunaAtual);
                 case 6:
-                    tk.setTipo(Tipo.SMULTIPLICACAO);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SMULTIPLICACAO,lexema,linhaAtual,colunaAtual);
                 case 7:
-                    tk.setTipo(Tipo.SDIVIDIR);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SDIVIDIR,lexema,linhaAtual,colunaAtual);
                 case 8:
-                    tk.setTipo(Tipo.SPONTO_E_VIRGULA);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SPONTO_E_VIRGULA,lexema,linhaAtual,colunaAtual);
                 case 9:
-                    tk.setTipo(Tipo.SPONTO);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SPONTO,lexema,linhaAtual,colunaAtual);
                 case 10:
-                    tk.setTipo(Tipo.SABRE_PARENTESIS);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SABRE_PARENTESIS,lexema,linhaAtual,colunaAtual);
                 case 11:
-                    tk.setTipo(Tipo.SFECHA_PARENTESIS);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SFECHA_PARENTESIS,lexema,linhaAtual,colunaAtual);
                 case 12:
                     if (Character.isDigit(c)) {
                         lexema += c;
@@ -179,12 +124,7 @@ public class Analisador {
                     }
                     break;
                 case 13:
-                    tk.setTipo(Tipo.SNUMERO);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SNUMERO,lexema,linhaAtual,colunaAtual);
                 case 14:
                     if (Character.isDigit(c) || Character.isAlphabetic(c) || c.equals('_')) {
                         lexema += c;
@@ -195,21 +135,10 @@ public class Analisador {
                     }
                     break;
                 case 15:
-                    tk.setTipo(Tipo.SIDENTIFICADOR);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                    return retornaToken(Tipo.SIDENTIFICADOR,lexema,linhaAtual,colunaAtual);
                 default:
-                    tk.setTipo(Tipo.SERRO);
-                    tk.setLexema(lexema);
-                    tk.setColuna(colunaAtual);
-                    tk.setLinha(linhaAtual);
-                    estado = 0;
-                    return tk;
+                   return retornaToken(Tipo.SERRO,lexema,linhaAtual,colunaAtual);
             }
-            //c = Ler();
         }
     }
 
@@ -217,11 +146,11 @@ public class Analisador {
         try {
             coluna++;
             int c = r.read();
-            return c != -1 ? (char) c : (char) -1; // TODO: RETIRAR
+            return c != -1 ? (char) c : (char) -1;
         } catch (Exception e) {
             System.out.println(e);
         }
-        return (char) -1; // TODO: RETIRAR
+        return (char) -1;
 }
 
     private void proximaLinha(Character c) {
@@ -267,10 +196,14 @@ public class Analisador {
         } else if(Tipo.SERRO.equals(token.getTipo())){
             tokens.add(token);
             return true;
-        } else
-        {
+        } else {
             tokens.add(token);
             return false;
         }
+    }
+
+    private Token retornaToken(Tipo tipo, String lexema, int linha, int coluna ){
+        estado = 0;
+        return new Token(tipo,lexema,linha,coluna);
     }
 }
